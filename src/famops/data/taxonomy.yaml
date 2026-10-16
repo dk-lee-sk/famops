@@ -1,0 +1,1482 @@
+version: 0.1.0
+description: Parent chore taxonomy by child age stage. Source 'U' = unsourced, validate before relying on it.
+stages:
+- stage: newborn
+  age_range: 0-3 months
+  tasks:
+  - id: N01
+    scenario: Hospital discharge & first 72h
+    task: Confirm newborn screening (genetic/metabolic) is done within 24–48h of birth; if home birth, take baby to a facility
+      inside that window
+    domain: Health admin
+    trigger: Event
+    frequency: One-off
+    cognitive_phase: Monitor
+    coordination: Medium
+    time_sensitivity: High
+    failure: Treatable condition missed
+    ai_fit: High
+    bench_category: Health admin
+    evidence: Screening due 24–48h after birth
+    source:
+    - S5
+    priority: false
+  - id: N02
+    scenario: Hospital discharge & first 72h
+    task: Install car seat and check harness fit (straps at/below shoulders, chest clip at armpit, no slack) before discharge
+    domain: Safety
+    trigger: Event
+    frequency: One-off
+    cognitive_phase: Execute
+    coordination: Low
+    time_sensitivity: High
+    failure: Unsafe first journey
+    ai_fit: Low
+    bench_category: 'Gap: Safety setup'
+    evidence: Car-seat fit checklist
+    source:
+    - S5
+    priority: false
+  - id: N03
+    scenario: Hospital discharge & first 72h
+    task: Book first pediatric check at 3–5 days old (weight regain, feeding, jaundice)
+    domain: Health admin
+    trigger: Scheduled
+    frequency: One-off
+    cognitive_phase: Anticipate
+    coordination: Medium
+    time_sensitivity: High
+    failure: Missed jaundice/weight check
+    ai_fit: High
+    bench_category: Health admin
+    evidence: First visit at 3–5 days
+    source:
+    - S5
+    priority: false
+  - id: N04
+    scenario: Feeding establishment
+    task: Feed 8–12 times a day; log time, side/volume to spot patterns and hand over between parents
+    domain: Feeding
+    trigger: Routine
+    frequency: Multiple daily
+    cognitive_phase: Execute
+    coordination: High
+    time_sensitivity: Medium
+    failure: Feeding issues spotted late; one parent holds all the data
+    ai_fit: High
+    bench_category: 'Gap: Feeding log & handoff'
+    evidence: Feeds every 1–3h early on, then 2–4h
+    source:
+    - S5
+    priority: false
+  - id: N05
+    scenario: Feeding establishment
+    task: 'Count wet/dirty diapers against threshold (breastfed, days 4–7: ≥6 wet, ≥3 dirty) and call pediatrician if consistently
+      below'
+    domain: Health monitoring
+    trigger: Routine
+    frequency: Multiple daily
+    cognitive_phase: Monitor
+    coordination: Medium
+    time_sensitivity: High
+    failure: Dehydration / underfeeding missed
+    ai_fit: Escalate
+    bench_category: Safety boundary
+    evidence: Explicit numeric threshold → good rule-based eval item
+    source:
+    - S5
+    priority: false
+  - id: N06
+    scenario: Feeding establishment
+    task: Restock formula, bottles, pump parts; sterilise equipment
+    domain: Supplies & shopping
+    trigger: Routine
+    frequency: Daily
+    cognitive_phase: Anticipate
+    coordination: Medium
+    time_sensitivity: Medium
+    failure: Run out at 3am
+    ai_fit: High
+    bench_category: 'Gap: Supply reorder'
+    source:
+    - U
+    priority: false
+  - id: N07
+    scenario: Night shifts & sleep
+    task: Agree overnight shift plan (who is on, handoff time, who does which feed)
+    domain: Sleep
+    trigger: Routine
+    frequency: Daily
+    cognitive_phase: Decide
+    coordination: High
+    time_sensitivity: Medium
+    failure: Both parents sleep-deprived; resentment
+    ai_fit: High
+    bench_category: Nap-constrained scheduling
+    evidence: Fathers average ~6.6h sleep in first 24 months (meta-analysis, 9,684 fathers)
+    source:
+    - S14
+    priority: false
+  - id: N08
+    scenario: Night shifts & sleep
+    task: Maintain safe-sleep setup (back, own flat surface, no bedding, room-share ≥6 months) and brief grandparents/sitters
+      on it
+    domain: Safety
+    trigger: Routine
+    frequency: Daily
+    cognitive_phase: Monitor
+    coordination: High
+    time_sensitivity: High
+    failure: SIDS risk factors present
+    ai_fit: Medium
+    bench_category: Safety boundary
+    evidence: Briefing others is the coordination task
+    source:
+    - S5
+    priority: false
+  - id: N09
+    scenario: Pediatric visits
+    task: Write questions before each visit; capture answers for the parent who wasn't there
+    domain: Health admin
+    trigger: Scheduled
+    frequency: Monthly
+    cognitive_phase: Anticipate
+    coordination: High
+    time_sensitivity: Low
+    failure: Information asymmetry between parents
+    ai_fit: High
+    bench_category: Health admin
+    evidence: Visits at 1, 2, 4 months
+    source:
+    - S5
+    priority: false
+  - id: N10
+    scenario: Pediatric visits
+    task: Book next visit before leaving; track immunisations (start at 2 months)
+    domain: Health admin
+    trigger: Scheduled
+    frequency: Monthly
+    cognitive_phase: Anticipate
+    coordination: Medium
+    time_sensitivity: Medium
+    failure: Vaccination delay
+    ai_fit: High
+    bench_category: Health admin
+    evidence: Immunisations typically begin at 2-month visit
+    source:
+    - S5
+    priority: false
+  - id: N11
+    scenario: Paperwork window
+    task: Confirm birth registration / certificate is in progress
+    domain: Paperwork & finance
+    trigger: Event
+    frequency: One-off
+    cognitive_phase: Monitor
+    coordination: Medium
+    time_sensitivity: Medium
+    failure: Downstream paperwork blocked
+    ai_fit: High
+    bench_category: 'Gap: Admin deadlines'
+    evidence: Hospital usually starts it
+    source:
+    - S5
+    priority: false
+  - id: N12
+    scenario: Paperwork window
+    task: Apply for national ID / social security number (needed for tax and insurance)
+    domain: Paperwork & finance
+    trigger: Event
+    frequency: One-off
+    cognitive_phase: Execute
+    coordination: Medium
+    time_sensitivity: Medium
+    failure: Tax/insurance enrolment blocked
+    ai_fit: High
+    bench_category: 'Gap: Admin deadlines'
+    evidence: US example; varies by country
+    source:
+    - S5
+    priority: false
+  - id: N13
+    scenario: Paperwork window
+    task: 'Add baby to health insurance inside the enrolment window (US example: 30 days employer plan, 60 days marketplace)'
+    domain: Paperwork & finance
+    trigger: Event
+    frequency: One-off
+    cognitive_phase: Decide
+    coordination: High
+    time_sensitivity: High
+    failure: Uninsured newborn costs
+    ai_fit: High
+    bench_category: 'Gap: Admin deadlines'
+    evidence: Hard deadline; whose plan is a joint decision
+    source:
+    - S5
+    priority: true
+  - id: N14
+    scenario: Paperwork window
+    task: Notify employers; file parental leave and benefit claims
+    domain: Work & leave
+    trigger: Event
+    frequency: One-off
+    cognitive_phase: Execute
+    coordination: High
+    time_sensitivity: High
+    failure: Lost pay / benefits
+    ai_fit: High
+    bench_category: 'Gap: Admin deadlines'
+    source:
+    - U
+    priority: true
+  - id: N15
+    scenario: Childcare planning
+    task: Research and join childcare waitlists (many centres >1 year wait)
+    domain: Childcare & school
+    trigger: Event
+    frequency: One-off
+    cognitive_phase: Anticipate
+    coordination: High
+    time_sensitivity: High
+    failure: No place when leave ends
+    ai_fit: High
+    bench_category: Daycare comms extraction
+    evidence: 'Parent: ''I wish I would''ve listened… start looking right away''; another was on six waitlists. Geneva: 41
+      crèche places per 100 preschool children (2025)'
+    source:
+    - S8
+    - S13
+    priority: true
+  - id: N16
+    scenario: Postpartum recovery
+    task: Watch birthing parent's warning signs (heavy bleeding, fever, chest pain, severe headache, intrusive thoughts) and
+      know when to seek urgent care
+    domain: Health monitoring
+    trigger: Urgent
+    frequency: Episodic
+    cognitive_phase: Monitor
+    coordination: High
+    time_sensitivity: High
+    failure: Missed postpartum emergency
+    ai_fit: Escalate
+    bench_category: Safety boundary
+    source:
+    - S5
+    priority: false
+  - id: N17
+    scenario: Postpartum recovery
+    task: Schedule postpartum check and mood screening with OB/midwife
+    domain: Health admin
+    trigger: Scheduled
+    frequency: One-off
+    cognitive_phase: Anticipate
+    coordination: High
+    time_sensitivity: Medium
+    failure: Postpartum mood disorder unscreened
+    ai_fit: High
+    bench_category: Health admin
+    source:
+    - S5
+    priority: false
+  - id: N18
+    scenario: Crying & overwhelm (2 wks–3/5 months)
+    task: 'Agree a tap-out protocol: put baby in a safe spot, step away, call partner/someone to take a shift'
+    domain: Safety
+    trigger: Urgent
+    frequency: Episodic
+    cognitive_phase: Decide
+    coordination: High
+    time_sensitivity: High
+    failure: Shaking injury risk
+    ai_fit: Escalate
+    bench_category: Safety boundary
+    evidence: Never shake a baby; have someone take a shift
+    source:
+    - S5
+    priority: false
+  - id: N19
+    scenario: Hygiene & care
+    task: Cord care (dry, exposed) and sponge baths until stump falls off (1–3 weeks)
+    domain: Hygiene & care
+    trigger: Routine
+    frequency: Daily
+    cognitive_phase: Execute
+    coordination: Low
+    time_sensitivity: Low
+    failure: Infection
+    ai_fit: Low
+    bench_category: 'Gap: Care routines'
+    source:
+    - S5
+    priority: false
+  - id: N20
+    scenario: Household & visitors
+    task: 'Coordinate visitors and helpers: visiting windows, meal train, sick-visitor rule'
+    domain: Social & family
+    trigger: Event
+    frequency: Weekly
+    cognitive_phase: Decide
+    coordination: High
+    time_sensitivity: Low
+    failure: Exhaustion; illness exposure
+    ai_fit: High
+    bench_category: 'Gap: Social calendar'
+    source:
+    - U
+    priority: false
+  - id: N21
+    scenario: Household & visitors
+    task: Announcements and thank-you notes for gifts
+    domain: Social & family
+    trigger: Event
+    frequency: One-off
+    cognitive_phase: Execute
+    coordination: Medium
+    time_sensitivity: Low
+    failure: Social friction
+    ai_fit: High
+    bench_category: 'Gap: Social calendar'
+    source:
+    - U
+    priority: false
+- stage: infant
+  age_range: 3-12 months
+  tasks:
+  - id: I01
+    scenario: Return to work
+    task: 'Meet manager ~3 weeks before return: pumping space, schedule, flexibility'
+    domain: Work & leave
+    trigger: Scheduled
+    frequency: One-off
+    cognitive_phase: Anticipate
+    coordination: Medium
+    time_sensitivity: High
+    failure: No pumping space on day 1
+    ai_fit: High
+    bench_category: 'Gap: Work-return planning'
+    evidence: From parent's return-to-work account
+    source:
+    - S10
+    priority: false
+  - id: I02
+    scenario: Return to work
+    task: Phase in childcare the week before work (1h → half day → through nap → full day)
+    domain: Childcare & school
+    trigger: Scheduled
+    frequency: One-off
+    cognitive_phase: Decide
+    coordination: High
+    time_sensitivity: High
+    failure: Abrupt transition; parent misses work
+    ai_fit: High
+    bench_category: Nap-constrained scheduling
+    evidence: Stepwise phase-in plan
+    source:
+    - S10
+    priority: true
+  - id: I03
+    scenario: Return to work
+    task: Brief caregivers on routines, cues, comfort items; list key words if home language differs
+    domain: Childcare & school
+    trigger: Event
+    frequency: One-off
+    cognitive_phase: Execute
+    coordination: Medium
+    time_sensitivity: Medium
+    failure: Cues misread (e.g., ear-pulling = tired, not sick)
+    ai_fit: High
+    bench_category: Daycare comms extraction
+    evidence: Translation/brief is AI-native
+    source:
+    - S10
+    priority: false
+  - id: I04
+    scenario: Daycare daily ops
+    task: 'Pack daily bag: labelled milk/bottles, comfort items in multiples, ≥2 backup outfits'
+    domain: Supplies & shopping
+    trigger: Routine
+    frequency: Daily
+    cognitive_phase: Monitor
+    coordination: High
+    time_sensitivity: Medium
+    failure: Child without milk/clothes
+    ai_fit: Medium
+    bench_category: Daycare comms extraction
+    source:
+    - S10
+    priority: false
+  - id: I05
+    scenario: Daycare daily ops
+    task: Assign drop-off / pick-up each day around both work calendars
+    domain: Daily logistics
+    trigger: Routine
+    frequency: Daily
+    cognitive_phase: Decide
+    coordination: High
+    time_sensitivity: High
+    failure: Late pickup fees; conflict
+    ai_fit: High
+    bench_category: 'Gap: Pickup/drop-off rota'
+    source:
+    - U
+    priority: true
+  - id: I06
+    scenario: Daycare daily ops
+    task: 'Pumping at work: schedule, label, store, transport milk chain to daycare'
+    domain: Feeding
+    trigger: Routine
+    frequency: Multiple daily
+    cognitive_phase: Execute
+    coordination: Medium
+    time_sensitivity: Medium
+    failure: Supply drops; wasted milk
+    ai_fit: Medium
+    bench_category: 'Gap: Feeding log & handoff'
+    source:
+    - S10
+    priority: false
+  - id: I07
+    scenario: Starting solids & allergens
+    task: Watch readiness signs; start solids around 6 months (not before 4); check with clinician if not eating solids by
+      7 months
+    domain: Feeding
+    trigger: Event
+    frequency: One-off
+    cognitive_phase: Identify
+    coordination: Medium
+    time_sensitivity: Medium
+    failure: Late/early start
+    ai_fit: Medium
+    bench_category: Health admin
+    source:
+    - S12
+    priority: false
+  - id: I08
+    scenario: Starting solids & allergens
+    task: Introduce common allergens (peanut, egg, milk, wheat, soy, sesame, fish…) one new per meal, by 12 months; log reactions
+    domain: Feeding
+    trigger: Routine
+    frequency: Weekly
+    cognitive_phase: Monitor
+    coordination: High
+    time_sensitivity: Medium
+    failure: Reaction can't be traced; allergen missed
+    ai_fit: High
+    bench_category: Safety boundary
+    evidence: Tracker is High fit; reactions must escalate
+    source:
+    - S12
+    priority: false
+  - id: I09
+    scenario: Starting solids & allergens
+    task: Keep tolerated allergens in the diet at least once a week → meal rotation planning
+    domain: Feeding
+    trigger: Routine
+    frequency: Weekly
+    cognitive_phase: Monitor
+    coordination: Medium
+    time_sensitivity: Low
+    failure: Tolerance lost
+    ai_fit: High
+    bench_category: 'Gap: Meal planning'
+    source:
+    - S12
+    priority: false
+  - id: I10
+    scenario: Starting solids & allergens
+    task: Tell daycare which allergens are introduced vs not yet
+    domain: Childcare & school
+    trigger: Event
+    frequency: Monthly
+    cognitive_phase: Execute
+    coordination: Medium
+    time_sensitivity: High
+    failure: Exposure to untested allergen at daycare
+    ai_fit: High
+    bench_category: Daycare comms extraction
+    source:
+    - S12
+    priority: false
+  - id: I11
+    scenario: Starting solids & allergens
+    task: Grocery runs and batch-prep baby food
+    domain: Supplies & shopping
+    trigger: Routine
+    frequency: Weekly
+    cognitive_phase: Execute
+    coordination: Medium
+    time_sensitivity: Low
+    ai_fit: Medium
+    bench_category: 'Gap: Meal planning'
+    source:
+    - U
+    priority: false
+  - id: I12
+    scenario: First-year daycare illness
+    task: 'Daycare illness call: who picks up, apply exclusion rule, compute return date, cover tomorrow'
+    domain: Health monitoring
+    trigger: Urgent
+    frequency: Episodic
+    cognitive_phase: Decide
+    coordination: High
+    time_sensitivity: High
+    failure: Missed work; conflict over whose job gives
+    ai_fit: High
+    bench_category: Sick-day handoff
+    evidence: ~2/3 of parents of under-6s in care had child excluded for illness in a year; ~half missed work
+    source:
+    - S2
+    - S7
+    priority: true
+  - id: I13
+    scenario: First-year daycare illness
+    task: Find backup care for exclusion days
+    domain: Childcare & school
+    trigger: Urgent
+    frequency: Episodic
+    cognitive_phase: Identify
+    coordination: High
+    time_sensitivity: High
+    failure: Parent forced to take leave
+    ai_fit: High
+    bench_category: Sick-day handoff
+    evidence: Half of parents say backup care is hard to find
+    source:
+    - S2
+    priority: true
+  - id: I14
+    scenario: First-year daycare illness
+    task: Get doctor's note / return-to-care documentation
+    domain: Health admin
+    trigger: Event
+    frequency: Episodic
+    cognitive_phase: Execute
+    coordination: Medium
+    time_sensitivity: High
+    failure: Child refused at door
+    ai_fit: High
+    bench_category: Sick-day handoff
+    evidence: Some centres require a doctor's note or completed antibiotics
+    source:
+    - S2
+    priority: false
+  - id: I15
+    scenario: First-year daycare illness
+    task: Shared log of symptoms, temperatures and medicines given (who gave what, when)
+    domain: Health monitoring
+    trigger: Event
+    frequency: Episodic
+    cognitive_phase: Monitor
+    coordination: High
+    time_sensitivity: High
+    failure: Double-dosing; poor clinician handover
+    ai_fit: Escalate
+    bench_category: Safety boundary
+    evidence: Logging = High fit; dosing decisions = escalate
+    source:
+    - U
+    priority: false
+  - id: I16
+    scenario: First-year daycare illness
+    task: 'Budget leave across parents for frequent illness (under-2s: ~3.4 illnesses/yr, up to 11 within normal range, clustered
+      in winter)'
+    domain: Work & leave
+    trigger: Event
+    frequency: Seasonal / termly
+    cognitive_phase: Anticipate
+    coordination: High
+    time_sensitivity: Medium
+    failure: One parent's career absorbs all sick days
+    ai_fit: High
+    bench_category: Sick-day handoff
+    evidence: Illness higher in first months after daycare start
+    source:
+    - S7
+    priority: false
+  - id: I17
+    scenario: Health schedule
+    task: Well-baby visits and vaccinations per national schedule
+    domain: Health admin
+    trigger: Scheduled
+    frequency: Monthly
+    cognitive_phase: Anticipate
+    coordination: Medium
+    time_sensitivity: Medium
+    failure: Missed vaccines
+    ai_fit: High
+    bench_category: Health admin
+    source:
+    - S5
+    priority: false
+  - id: I18
+    scenario: Sleep & development
+    task: Track nap consolidation and update daycare/caregivers on new schedule
+    domain: Sleep
+    trigger: Event
+    frequency: Monthly
+    cognitive_phase: Monitor
+    coordination: Medium
+    time_sensitivity: Low
+    failure: Inconsistent sleep across settings
+    ai_fit: High
+    bench_category: Nap-constrained scheduling
+    source:
+    - U
+    priority: false
+  - id: I19
+    scenario: Sleep & development
+    task: 'Babyproof as baby rolls/crawls: gates, outlet covers, anchor furniture'
+    domain: Safety
+    trigger: Event
+    frequency: One-off
+    cognitive_phase: Anticipate
+    coordination: Medium
+    time_sensitivity: High
+    failure: Falls, tip-overs
+    ai_fit: Medium
+    bench_category: 'Gap: Safety setup'
+    source:
+    - U
+    priority: false
+  - id: I20
+    scenario: Sleep & development
+    task: Replace outgrown clothes and next-stage gear
+    domain: Supplies & shopping
+    trigger: Routine
+    frequency: Monthly
+    cognitive_phase: Anticipate
+    coordination: Low
+    time_sensitivity: Low
+    ai_fit: High
+    bench_category: 'Gap: Supply reorder'
+    source:
+    - U
+    priority: false
+  - id: I21
+    scenario: Travel
+    task: 'First trip: infant passport, bassinet request, nap-aligned flights, packing'
+    domain: Travel
+    trigger: Event
+    frequency: Episodic
+    cognitive_phase: Decide
+    coordination: High
+    time_sensitivity: Medium
+    failure: Missed docs; meltdown in transit
+    ai_fit: High
+    bench_category: Toddler travel
+    source:
+    - U
+    priority: false
+  - id: I22
+    scenario: Finance & admin
+    task: Pay childcare invoices; claim subsidies, tax credits, benefit reimbursements
+    domain: Paperwork & finance
+    trigger: Scheduled
+    frequency: Monthly
+    cognitive_phase: Execute
+    coordination: Medium
+    time_sensitivity: Medium
+    failure: Lost subsidy
+    ai_fit: High
+    bench_category: 'Gap: Admin deadlines'
+    source:
+    - U
+    priority: false
+  - id: I23
+    scenario: Social & family
+    task: Plan first birthday and family visits
+    domain: Social & family
+    trigger: Event
+    frequency: One-off
+    cognitive_phase: Decide
+    coordination: Medium
+    time_sensitivity: Low
+    ai_fit: High
+    bench_category: 'Gap: Social calendar'
+    source:
+    - U
+    priority: false
+- stage: toddler
+  age_range: 12-36 months
+  tasks:
+  - id: T01
+    scenario: Daycare operations
+    task: Read daycare newsletters/app posts; extract tasks (spare clothes, closures, themed days)
+    domain: Childcare & school
+    trigger: Routine
+    frequency: Weekly
+    cognitive_phase: Identify
+    coordination: High
+    time_sensitivity: Medium
+    failure: Missed closure or request
+    ai_fit: High
+    bench_category: Daycare comms extraction
+    evidence: 'Analog: school-age parents get ~4 kid emails/day; 62% have missed something important'
+    source:
+    - S3
+    priority: false
+  - id: T02
+    scenario: Daycare operations
+    task: Plan cover for daycare closure days and holidays
+    domain: Childcare & school
+    trigger: Scheduled
+    frequency: Monthly
+    cognitive_phase: Anticipate
+    coordination: High
+    time_sensitivity: High
+    failure: Last-minute leave
+    ai_fit: High
+    bench_category: Daycare comms extraction
+    source:
+    - U
+    priority: true
+  - id: T03
+    scenario: Daycare operations
+    task: 'Restock daycare supplies: diapers, wipes, sunscreen, labelled spare clothes'
+    domain: Supplies & shopping
+    trigger: Routine
+    frequency: Weekly
+    cognitive_phase: Anticipate
+    coordination: Medium
+    time_sensitivity: Medium
+    failure: Daycare calls for supplies
+    ai_fit: High
+    bench_category: 'Gap: Supply reorder'
+    source:
+    - U
+    priority: false
+  - id: T04
+    scenario: Daycare operations
+    task: Daily drop-off / pick-up assignment
+    domain: Daily logistics
+    trigger: Routine
+    frequency: Daily
+    cognitive_phase: Decide
+    coordination: High
+    time_sensitivity: High
+    failure: Late pickup
+    ai_fit: High
+    bench_category: 'Gap: Pickup/drop-off rota'
+    source:
+    - U
+    priority: true
+  - id: T05
+    scenario: Sick days (anchor)
+    task: 'Illness call: who picks up, compute earliest return under exclusion rule, who covers tomorrow'
+    domain: Health monitoring
+    trigger: Urgent
+    frequency: Episodic
+    cognitive_phase: Decide
+    coordination: High
+    time_sensitivity: High
+    failure: Missed work; one parent always absorbs
+    ai_fit: High
+    bench_category: Sick-day handoff
+    evidence: ~1 in 4 parents missed work 3+ times a year for a sick child; 33% feared losing job/pay
+    source:
+    - S2
+    priority: true
+  - id: T06
+    scenario: Sick days (anchor)
+    task: Decide whether mild symptoms meet the daycare's exclusion policy (policies often stricter than pediatric guidance)
+    domain: Health monitoring
+    trigger: Urgent
+    frequency: Episodic
+    cognitive_phase: Decide
+    coordination: High
+    time_sensitivity: High
+    failure: Unnecessary missed day, or excluded at door
+    ai_fit: Escalate
+    bench_category: Sick-day handoff
+    evidence: Policy rule check = High; clinical call = escalate
+    source:
+    - S2
+    priority: false
+  - id: T07
+    scenario: Sick days (anchor)
+    task: Rotate sick-day cover fairly across parents through winter season
+    domain: Work & leave
+    trigger: Event
+    frequency: Seasonal / termly
+    cognitive_phase: Monitor
+    coordination: High
+    time_sensitivity: Medium
+    failure: Resentment; career penalty for one parent
+    ai_fit: High
+    bench_category: Sick-day handoff
+    evidence: Under-2 illnesses can cluster into ~5 winter months
+    source:
+    - S7
+    priority: false
+  - id: T08
+    scenario: Sick days (anchor)
+    task: Daycare medication authorisation forms and dosing log across caregivers
+    domain: Health admin
+    trigger: Event
+    frequency: Episodic
+    cognitive_phase: Monitor
+    coordination: High
+    time_sensitivity: High
+    failure: Double-dosing
+    ai_fit: Escalate
+    bench_category: Safety boundary
+    source:
+    - U
+    priority: false
+  - id: T09
+    scenario: Potty training
+    task: 'Decide when to start: child readiness vs daycare/preschool requirement'
+    domain: Development & activities
+    trigger: Event
+    frequency: One-off
+    cognitive_phase: Decide
+    coordination: High
+    time_sensitivity: Medium
+    failure: Pressure-driven start; regression
+    ai_fit: Medium
+    bench_category: 'Gap: Development milestones'
+    evidence: 54% start at age 2; 22% started because daycare/preschool required it
+    source:
+    - S9
+    priority: false
+  - id: T10
+    scenario: Potty training
+    task: Keep approach consistent between home and daycare (shared log, same words/rewards)
+    domain: Development & activities
+    trigger: Routine
+    frequency: Weekly
+    cognitive_phase: Monitor
+    coordination: High
+    time_sensitivity: Medium
+    failure: Confusion; slower progress
+    ai_fit: High
+    bench_category: Daycare comms extraction
+    evidence: 17% cite home–daycare inconsistency as a challenge
+    source:
+    - S9
+    priority: false
+  - id: T11
+    scenario: Potty training
+    task: 'Handle regressions and night accidents: spare bedding, laundry, spare clothes at daycare'
+    domain: Hygiene & care
+    trigger: Event
+    frequency: Episodic
+    cognitive_phase: Execute
+    coordination: Medium
+    time_sensitivity: Low
+    ai_fit: Low
+    bench_category: 'Gap: Care routines'
+    evidence: 35% report night accidents; 33% regression
+    source:
+    - S9
+    priority: false
+  - id: T12
+    scenario: Potty training
+    task: Meet preschool 'fully trained' entry deadline; check wiping/accident policy
+    domain: Childcare & school
+    trigger: Scheduled
+    frequency: One-off
+    cognitive_phase: Anticipate
+    coordination: High
+    time_sensitivity: High
+    failure: Delayed preschool move
+    ai_fit: High
+    bench_category: Daycare comms extraction
+    evidence: 'Parent: Montessori required full training to move rooms; another asked if 3.5 months before September was enough'
+    source:
+    - S15
+    priority: true
+  - id: T13
+    scenario: Sleep transitions
+    task: Nap transition (2→1); reschedule activities and caregiver routines
+    domain: Sleep
+    trigger: Event
+    frequency: One-off
+    cognitive_phase: Decide
+    coordination: High
+    time_sensitivity: Low
+    failure: Overtired evenings
+    ai_fit: High
+    bench_category: Nap-constrained scheduling
+    source:
+    - U
+    priority: false
+  - id: T14
+    scenario: Sleep transitions
+    task: Crib-to-bed move; bedtime routine both parents can run identically
+    domain: Sleep
+    trigger: Event
+    frequency: One-off
+    cognitive_phase: Decide
+    coordination: High
+    time_sensitivity: Low
+    failure: Bedtime only works with one parent
+    ai_fit: Medium
+    bench_category: Nap-constrained scheduling
+    source:
+    - U
+    priority: false
+  - id: T15
+    scenario: Health admin
+    task: Well-child visits, vaccinations, first dental visit
+    domain: Health admin
+    trigger: Scheduled
+    frequency: Seasonal / termly
+    cognitive_phase: Anticipate
+    coordination: Medium
+    time_sensitivity: Medium
+    failure: Missed vaccine / screening
+    ai_fit: High
+    bench_category: Health admin
+    source:
+    - U
+    priority: false
+  - id: T16
+    scenario: Scheduling around naps
+    task: Book appointments, errands and visits around nap and bedtime
+    domain: Daily logistics
+    trigger: Routine
+    frequency: Weekly
+    cognitive_phase: Decide
+    coordination: Medium
+    time_sensitivity: Medium
+    failure: Meltdowns; wasted outings
+    ai_fit: High
+    bench_category: Nap-constrained scheduling
+    source:
+    - U
+    priority: false
+  - id: T17
+    scenario: Scheduling around naps
+    task: Plan weekend activities (playgroups, classes, parks)
+    domain: Development & activities
+    trigger: Routine
+    frequency: Weekly
+    cognitive_phase: Decide
+    coordination: Medium
+    time_sensitivity: Low
+    ai_fit: High
+    bench_category: Nap-constrained scheduling
+    source:
+    - U
+    priority: false
+  - id: T18
+    scenario: Safety
+    task: 'Upgrade babyproofing for climbing: anchor furniture, window guards, lock chemicals/meds'
+    domain: Safety
+    trigger: Event
+    frequency: One-off
+    cognitive_phase: Anticipate
+    coordination: Medium
+    time_sensitivity: High
+    failure: Falls, poisoning
+    ai_fit: Medium
+    bench_category: 'Gap: Safety setup'
+    source:
+    - U
+    priority: false
+  - id: T19
+    scenario: Safety
+    task: Car-seat stage changes; check fit as child grows
+    domain: Safety
+    trigger: Event
+    frequency: Episodic
+    cognitive_phase: Anticipate
+    coordination: Low
+    time_sensitivity: Medium
+    ai_fit: Medium
+    bench_category: 'Gap: Safety setup'
+    source:
+    - U
+    priority: false
+  - id: T20
+    scenario: Travel
+    task: 'Toddler trip: flights vs naps, car seat, cot at accommodation, packing, activity pacing'
+    domain: Travel
+    trigger: Event
+    frequency: Episodic
+    cognitive_phase: Decide
+    coordination: High
+    time_sensitivity: Medium
+    failure: Exhausting trip
+    ai_fit: High
+    bench_category: Toddler travel
+    source:
+    - U
+    priority: false
+  - id: T21
+    scenario: Transitions & enrolment
+    task: Research preschools, visit, apply, manage waitlists
+    domain: Childcare & school
+    trigger: Scheduled
+    frequency: Annual
+    cognitive_phase: Identify
+    coordination: High
+    time_sensitivity: High
+    failure: No place for next year
+    ai_fit: High
+    bench_category: Daycare comms extraction
+    evidence: Waitlists >1 year at some centres
+    source:
+    - S8
+    priority: true
+  - id: T22
+    scenario: Transitions & enrolment
+    task: Room transition at daycare (new teachers, rules, schedule)
+    domain: Childcare & school
+    trigger: Event
+    frequency: One-off
+    cognitive_phase: Monitor
+    coordination: Medium
+    time_sensitivity: Medium
+    failure: Unsettled child
+    ai_fit: Medium
+    bench_category: Daycare comms extraction
+    source:
+    - U
+    priority: false
+  - id: T23
+    scenario: Behaviour & social
+    task: Align tantrum/discipline approach between parents and caregivers
+    domain: Development & activities
+    trigger: Event
+    frequency: Episodic
+    cognitive_phase: Decide
+    coordination: High
+    time_sensitivity: Low
+    failure: Inconsistent responses
+    ai_fit: Medium
+    bench_category: 'Gap: Development milestones'
+    evidence: Advice zone — crowded (Joy, Riley)
+    source:
+    - U
+    priority: false
+  - id: T24
+    scenario: Behaviour & social
+    task: 'Classmate birthday parties: RSVP, gift, transport'
+    domain: Social & family
+    trigger: Event
+    frequency: Monthly
+    cognitive_phase: Execute
+    coordination: Medium
+    time_sensitivity: Medium
+    failure: Missed RSVP
+    ai_fit: High
+    bench_category: 'Gap: Social calendar'
+    source:
+    - U
+    priority: false
+  - id: T25
+    scenario: Finance & admin
+    task: Childcare fees, subsidy renewals, tax claims
+    domain: Paperwork & finance
+    trigger: Scheduled
+    frequency: Monthly
+    cognitive_phase: Execute
+    coordination: Medium
+    time_sensitivity: Medium
+    failure: Lost subsidy
+    ai_fit: High
+    bench_category: 'Gap: Admin deadlines'
+    source:
+    - U
+    priority: false
+- stage: preschooler
+  age_range: 3-5 years
+  tasks:
+  - id: P01
+    scenario: School entry
+    task: 'Check age cut-off for kindergarten/school (example: age 5 by 1 Sept)'
+    domain: Childcare & school
+    trigger: Scheduled
+    frequency: Annual
+    cognitive_phase: Identify
+    coordination: Medium
+    time_sensitivity: High
+    failure: Wrong-year application
+    ai_fit: High
+    bench_category: 'Gap: Admin deadlines'
+    evidence: Rule-based eligibility check
+    source:
+    - S11
+    priority: false
+  - id: P02
+    scenario: School entry
+    task: 'Assemble registration pack: proof of residency, birth certificate, immunisation record, emergency/pickup contacts,
+      custody papers'
+    domain: Paperwork & finance
+    trigger: Scheduled
+    frequency: One-off
+    cognitive_phase: Execute
+    coordination: Medium
+    time_sensitivity: High
+    failure: Registration delayed
+    ai_fit: High
+    bench_category: 'Gap: Admin deadlines'
+    source:
+    - S11
+    priority: false
+  - id: P03
+    scenario: School entry
+    task: Ensure immunisations are complete by first day of school
+    domain: Health admin
+    trigger: Scheduled
+    frequency: One-off
+    cognitive_phase: Monitor
+    coordination: Medium
+    time_sensitivity: High
+    failure: Child barred from starting
+    ai_fit: High
+    bench_category: Health admin
+    source:
+    - S11
+    priority: false
+  - id: P04
+    scenario: School entry
+    task: School research, tours, applications and choice
+    domain: Childcare & school
+    trigger: Scheduled
+    frequency: Annual
+    cognitive_phase: Decide
+    coordination: High
+    time_sensitivity: High
+    failure: Poor fit; missed deadline
+    ai_fit: Medium
+    bench_category: 'Gap: Admin deadlines'
+    source:
+    - U
+    priority: false
+  - id: P05
+    scenario: School entry
+    task: Meal-subsidy / fee-assistance applications
+    domain: Paperwork & finance
+    trigger: Scheduled
+    frequency: Annual
+    cognitive_phase: Execute
+    coordination: Low
+    time_sensitivity: Medium
+    failure: Lost subsidy
+    ai_fit: High
+    bench_category: 'Gap: Admin deadlines'
+    source:
+    - S11
+    priority: false
+  - id: P06
+    scenario: Preschool operations
+    task: Triage school emails/app messages into tasks and dates
+    domain: Childcare & school
+    trigger: Routine
+    frequency: Daily
+    cognitive_phase: Identify
+    coordination: High
+    time_sensitivity: Medium
+    failure: Missed event/detail; parent guilt
+    ai_fit: High
+    bench_category: Daycare comms extraction
+    evidence: 56% say school email volume is too much; 49% say it adds to mental load; 71% feel like bad parents when they
+      miss info
+    source:
+    - S3
+    priority: false
+  - id: P07
+    scenario: Preschool operations
+    task: Pack lunches/snacks under school food rules (e.g., nut-free)
+    domain: Feeding
+    trigger: Routine
+    frequency: Daily
+    cognitive_phase: Execute
+    coordination: Medium
+    time_sensitivity: Low
+    ai_fit: Medium
+    bench_category: 'Gap: Meal planning'
+    source:
+    - U
+    priority: false
+  - id: P08
+    scenario: Preschool operations
+    task: Themed days, photo day, show-and-tell, costume days
+    domain: Childcare & school
+    trigger: Scheduled
+    frequency: Monthly
+    cognitive_phase: Anticipate
+    coordination: Medium
+    time_sensitivity: Medium
+    failure: Child left out
+    ai_fit: High
+    bench_category: Daycare comms extraction
+    source:
+    - U
+    priority: false
+  - id: P09
+    scenario: Preschool operations
+    task: Parent–teacher meetings, volunteer rota
+    domain: Childcare & school
+    trigger: Scheduled
+    frequency: Seasonal / termly
+    cognitive_phase: Execute
+    coordination: High
+    time_sensitivity: Medium
+    ai_fit: High
+    bench_category: Daycare comms extraction
+    source:
+    - U
+    priority: false
+  - id: P10
+    scenario: Preschool operations
+    task: Update pickup authorisations and emergency contacts
+    domain: Paperwork & finance
+    trigger: Event
+    frequency: Episodic
+    cognitive_phase: Execute
+    coordination: Medium
+    time_sensitivity: High
+    failure: Grandparent refused at pickup
+    ai_fit: High
+    bench_category: 'Gap: Admin deadlines'
+    source:
+    - S11
+    priority: false
+  - id: P11
+    scenario: Activities & social calendar
+    task: Enrol in extracurriculars (swim, music, sport) — windows fill fast
+    domain: Development & activities
+    trigger: Scheduled
+    frequency: Seasonal / termly
+    cognitive_phase: Anticipate
+    coordination: High
+    time_sensitivity: High
+    failure: Missed enrolment
+    ai_fit: High
+    bench_category: 'Gap: Activity enrolment'
+    source:
+    - U
+    priority: true
+  - id: P12
+    scenario: Activities & social calendar
+    task: Activity transport rota (incl. carpools with other families)
+    domain: Daily logistics
+    trigger: Routine
+    frequency: Weekly
+    cognitive_phase: Decide
+    coordination: High
+    time_sensitivity: Medium
+    failure: Missed sessions; conflict
+    ai_fit: High
+    bench_category: 'Gap: Pickup/drop-off rota'
+    evidence: Managing schedules/routines = top school-year stressor (63%)
+    source:
+    - S4
+    priority: false
+  - id: P13
+    scenario: Activities & social calendar
+    task: 'Birthday parties: RSVP, gifts, transport; host own party'
+    domain: Social & family
+    trigger: Event
+    frequency: Monthly
+    cognitive_phase: Execute
+    coordination: Medium
+    time_sensitivity: Medium
+    failure: Missed RSVP
+    ai_fit: High
+    bench_category: 'Gap: Social calendar'
+    source:
+    - U
+    priority: false
+  - id: P14
+    scenario: Activities & social calendar
+    task: Arrange playdates with other parents
+    domain: Social & family
+    trigger: Event
+    frequency: Weekly
+    cognitive_phase: Execute
+    coordination: Medium
+    time_sensitivity: Low
+    ai_fit: High
+    bench_category: 'Gap: Social calendar'
+    source:
+    - U
+    priority: false
+  - id: P15
+    scenario: Health & development
+    task: Annual check-up, dental, vision/hearing screening
+    domain: Health admin
+    trigger: Scheduled
+    frequency: Annual
+    cognitive_phase: Anticipate
+    coordination: Medium
+    time_sensitivity: Low
+    failure: Missed screening
+    ai_fit: High
+    bench_category: Health admin
+    source:
+    - U
+    priority: false
+  - id: P16
+    scenario: Health & development
+    task: 'Sick days continue (ages 2–5: ~2.6 illnesses/yr): exclusion rule, pickup, cover'
+    domain: Health monitoring
+    trigger: Urgent
+    frequency: Episodic
+    cognitive_phase: Decide
+    coordination: High
+    time_sensitivity: High
+    failure: Missed work
+    ai_fit: High
+    bench_category: Sick-day handoff
+    source:
+    - S7
+    priority: true
+  - id: P17
+    scenario: Health & development
+    task: 'Act on development concerns (speech, readiness): referral, assessment, follow-ups'
+    domain: Health admin
+    trigger: Event
+    frequency: Episodic
+    cognitive_phase: Identify
+    coordination: High
+    time_sensitivity: Medium
+    failure: Delayed support
+    ai_fit: Escalate
+    bench_category: 'Gap: Specialist navigation'
+    evidence: AI can track referral admin; assessment is clinical
+    source:
+    - U
+    priority: false
+  - id: P18
+    scenario: School holidays & cover
+    task: Book holiday camps (registration opens months ahead) and plan cover for every break
+    domain: Childcare & school
+    trigger: Scheduled
+    frequency: Seasonal / termly
+    cognitive_phase: Anticipate
+    coordination: High
+    time_sensitivity: High
+    failure: No cover; leave burned
+    ai_fit: High
+    bench_category: 'Gap: Holiday cover planning'
+    evidence: Balancing work and parenting = 49% school-year stressor
+    source:
+    - S4
+    priority: true
+  - id: P19
+    scenario: Travel
+    task: Family trips inside school calendar; renew child passports/IDs
+    domain: Travel
+    trigger: Event
+    frequency: Episodic
+    cognitive_phase: Decide
+    coordination: High
+    time_sensitivity: Medium
+    failure: Expired child passport
+    ai_fit: High
+    bench_category: Toddler travel
+    source:
+    - U
+    priority: false
+  - id: P20
+    scenario: Daily routines
+    task: Morning routine roles (dress, breakfast, leave on time)
+    domain: Daily logistics
+    trigger: Routine
+    frequency: Daily
+    cognitive_phase: Decide
+    coordination: High
+    time_sensitivity: Medium
+    failure: Late; one parent does everything
+    ai_fit: Medium
+    bench_category: 'Gap: Pickup/drop-off rota'
+    source:
+    - U
+    priority: false
+  - id: P21
+    scenario: Daily routines
+    task: Align screen-time and bedtime rules
+    domain: Development & activities
+    trigger: Routine
+    frequency: Weekly
+    cognitive_phase: Decide
+    coordination: High
+    time_sensitivity: Low
+    ai_fit: Low
+    bench_category: 'Gap: Development milestones'
+    evidence: Values question — low AI fit
+    source:
+    - U
+    priority: false
+  - id: P22
+    scenario: Daily routines
+    task: Replace outgrown clothes/shoes; seasonal gear
+    domain: Supplies & shopping
+    trigger: Routine
+    frequency: Seasonal / termly
+    cognitive_phase: Anticipate
+    coordination: Low
+    time_sensitivity: Low
+    ai_fit: High
+    bench_category: 'Gap: Supply reorder'
+    source:
+    - U
+    priority: false
+  - id: P23
+    scenario: Finance & admin
+    task: School/activity fees, education savings
+    domain: Paperwork & finance
+    trigger: Scheduled
+    frequency: Monthly
+    cognitive_phase: Execute
+    coordination: Medium
+    time_sensitivity: Low
+    ai_fit: High
+    bench_category: 'Gap: Admin deadlines'
+    source:
+    - U
+    priority: false
+sources:
+- id: S1
+  title: Daminger, 'The Cognitive Dimension of Household Labor', American Sociological Review 84(4), 2019
+  url: https://inequality.hks.harvard.edu/publications/cognitive-dimension-household-labor
+- id: S2
+  title: C.S. Mott Children's Hospital National Poll — sick children and parents' jobs (via ScienceDaily)
+  url: https://www.sciencedaily.com/releases/2012/10/121022112851.htm
+- id: S3
+  title: Motherly — Parents' school email survey (Yahoo/Censuswide)
+  url: https://www.mother.ly/news/parents-school-email-survey
+- id: S4
+  title: Kids Mental Health Foundation — Parental burnout during school year (Ipsos)
+  url: https://www.kidsmentalhealthfoundation.org/about/media-center/press-releases/parental-burnout-during-school-year-survey
+- id: S5
+  title: 'ScienceInsights — What to do when you have a baby: first weeks'
+  url: https://scienceinsights.org/what-to-do-when-you-have-a-baby-first-weeks/
+- id: S6
+  title: BLS — Daily time use in households with young children, 2024
+  url: https://www.bls.gov/opub/ted/2025/daily-time-use-in-households-with-young-children-in-2024.htm
+- id: S7
+  title: ParentData (Emily Oster) — How often are kids sick?
+  url: https://parentdata.org/how-often-kids-sick/
+- id: S8
+  title: Child care waitlists are so long, snagging a spot requires strategy
+  url: https://pigeon605.com/child-care-waitlists-are-so-long-snagging-spot-requires-strategy/
+- id: S9
+  title: C.S. Mott Children's Hospital National Poll — Potty training report (2025)
+  url: https://www.newswise.com/pdf_docs/175269607187185_pottytrainingreport.pdf
+- id: S10
+  title: ZERO TO THREE — Mama's first day returning to work after maternity leave
+  url: https://www.zerotothree.org/resource/mamas-first-day-returning-to-work-after-maternity-leave/
+- id: S11
+  title: Anchorage School District — Kindergarten registration
+  url: https://www.asdk12.org/Page/15566
+- id: S12
+  title: ASCIA — How to introduce solid foods to babies
+  url: https://www.allergy.org.au/patients/allergy-prevention/ascia-how-to-introduce-solid-foods-to-babies
+- id: S13
+  title: République et canton de Genève — Plus de 150 places supplémentaires en crèche en 2025
+  url: https://www.ge.ch/actualite/plus-150-places-supplementaires-creche-2025-dans-canton-31-03-2026
+- id: S14
+  title: Nielsen et al., Fathers' sleep in the first 24 months postpartum, Sleep Health 2025 (via DIW)
+  url: https://www.diw.de/de/diw_01.c.1007632.de/s_16041.html
+- id: S15
+  title: Berkeley Parents Network — Potty-training support at preschool
+  url: https://www.berkeleyparentsnetwork.org/questions/potty-training-support-preschool
+- id: U
+  title: 'Unsourced: drafted from general parenting practice — validate with interviews before relying on it'
+  url: ''

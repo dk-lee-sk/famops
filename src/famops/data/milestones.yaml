@@ -1,0 +1,78 @@
+# Age-anchored tasks used by the "anticipate" engine.
+# Windows are in days relative to date of birth (negative = during pregnancy).
+# Source IDs refer to taxonomy.yaml -> sources. Jurisdiction-specific items are tagged.
+milestones:
+  - id: waitlists
+    title: "Research and join childcare waitlists"
+    window_days: [-270, 0]
+    taxonomy_ref: N15
+    source: [S8]
+    note: "Many centres have waitlists over a year; start as soon as pregnancy is known."
+
+  - id: newborn_screening
+    title: "Confirm newborn screening is done"
+    window_days: [0, 2]
+    taxonomy_ref: N01
+    source: [S5]
+
+  - id: first_pediatric_visit
+    title: "First pediatric check-up"
+    window_days: [3, 5]
+    taxonomy_ref: N03
+    source: [S5]
+
+  - id: insurance_enrolment_us
+    title: "Add baby to health insurance (US employer plan: 30-day window)"
+    window_days: [0, 30]
+    jurisdiction: US
+    taxonomy_ref: N13
+    source: [S5]
+
+  - id: visit_1m
+    title: "1-month pediatric visit"
+    window_days: [28, 35]
+    taxonomy_ref: N10
+    source: [S5]
+
+  - id: visit_2m_vaccines
+    title: "2-month visit; immunisations typically start"
+    window_days: [56, 66]
+    taxonomy_ref: N10
+    source: [S5]
+
+  - id: visit_4m
+    title: "4-month pediatric visit"
+    window_days: [118, 128]
+    taxonomy_ref: N10
+    source: [S5]
+
+  - id: solids_readiness
+    title: "Watch for solids readiness (around 6 months, not before 4)"
+    window_days: [122, 213]
+    taxonomy_ref: I07
+    source: [S12]
+    note: "If not eating solids by ~7 months, check with your clinician."
+
+  - id: allergen_introduction
+    title: "Introduce common allergens one at a time (by 12 months)"
+    window_days: [152, 365]
+    taxonomy_ref: I08
+    source: [S12]
+    note: "Keep tolerated allergens in the diet at least weekly."
+
+  - id: potty_training_consider
+    title: "Consider potty-training start; check preschool requirements"
+    window_days: [548, 1095]
+    taxonomy_ref: T09
+    source: [S9]
+    note: "Most parents start at age 2; 22% start because daycare/preschool requires it."
+
+# School entry is computed, not fixed: see anticipate.school_entry().
+school_entry_default:
+  entry_age_years: 5
+  cutoff_month: 9
+  cutoff_day: 1
+  registration_lead_days: 60    # ASSUMPTION: registration opens ~2 months before start; set locally
+  term_start_month: 8
+  term_start_day: 20             # ASSUMPTION: set to your district's first day
+  source: [S11]

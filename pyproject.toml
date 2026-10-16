@@ -1,0 +1,29 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "famops"
+version = "0.1.0"
+description = "Shared family operations layer: task ownership, sick-day handoff and age-based anticipation for two-parent households. Usable from any MCP-capable AI assistant."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+dependencies = [
+  "pyyaml>=6.0",
+  "mcp>=2.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+famops = "famops.cli:main"
+famops-mcp = "famops.server:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/famops"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

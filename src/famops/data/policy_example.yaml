@@ -1,0 +1,43 @@
+# SYNTHETIC daycare exclusion policy, modelled on common exclusion-rule patterns.
+# It is NOT the policy of any real institution and NOT medical guidance.
+# Replace it with your own daycare's written policy.
+policy_name: "Example crèche (synthetic)"
+timezone: "Europe/Zurich"
+
+# When a child is cleared, they may return at the first opening time at or after
+# the clearance moment ("next_opening"), which in practice means the next morning.
+return_rule: next_opening
+
+opening_hours:          # weekday -> "HH:MM-HH:MM"; omitted days are closed
+  mon: "07:30-18:30"
+  tue: "07:30-18:30"
+  wed: "07:30-18:30"
+  thu: "07:30-18:30"
+  fri: "07:30-18:30"
+
+closures: []            # ISO dates the daycare is closed, e.g. ["2026-12-24"]
+
+rules:
+  fever:
+    threshold_c: 38.0
+    exclude_hours_after_last: 24
+    note: "Fever-free for 24h without fever-reducing medication."
+  vomiting:
+    exclude_hours_after_last: 48
+  diarrhoea:
+    exclude_hours_after_last: 48
+  conjunctivitis:
+    exclude_hours_after_treatment_start: 24
+  rash_with_fever:
+    requires_doctor_note: true
+
+# Red flags never produce a return date. The tool stops and tells the parent to
+# contact a clinician or emergency services. It does not assess symptoms.
+red_flags:
+  - "difficulty breathing"
+  - "unresponsive or very hard to wake"
+  - "seizure"
+  - "signs of dehydration (no wet diaper for many hours, very dry mouth)"
+  - "stiff neck"
+  - "non-blanching rash"
+fever_red_flag_under_months: 3   # any fever at or above threshold in a baby this young => escalate
