@@ -16,3 +16,4 @@ jobs:
       - run: pip install -e ".[dev]"
       - run: pytest -q
       - run: famops demo
+      - run: famops upcoming --dob 2025-02-10 --today 2026-10-18

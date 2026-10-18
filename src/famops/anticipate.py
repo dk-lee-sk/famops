@@ -53,17 +53,24 @@ def school_entry(dob: date, cfg: dict | None = None) -> dict:
 
 
 def upcoming(dob: date, today: date, horizon_days: int = 60, lookback_days: int = 14,
-             jurisdiction: str | None = None) -> list[Upcoming]:
+             jurisdiction: str | None = None, weeks_premature: int = 0) -> list[Upcoming]:
+    """Milestones due now, coming up, or recently closed.
+
+    weeks_premature shifts developmental milestones (corrected_age: true) by the
+    weeks a baby was born early; appointments and paperwork follow the real birth date.
+    """
     data = load_bundled("milestones.yaml")["milestones"]
     out: list[Upcoming] = []
     horizon = today + timedelta(days=horizon_days)
     lookback = today - timedelta(days=lookback_days)
+    corrected_dob = dob + timedelta(weeks=max(0, weeks_premature))
     for m in data:
         mj = m.get("jurisdiction")
         if mj and jurisdiction and mj != jurisdiction:
             continue
-        s = dob + timedelta(days=m["window_days"][0])
-        e = dob + timedelta(days=m["window_days"][1])
+        anchor = corrected_dob if m.get("corrected_age") else dob
+        s = anchor + timedelta(days=m["window_days"][0])
+        e = anchor + timedelta(days=m["window_days"][1])
         if s <= today <= e:
             status = "due_now"
         elif today < s <= horizon:

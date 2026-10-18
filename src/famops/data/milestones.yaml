@@ -1,6 +1,7 @@
 # Age-anchored tasks used by the "anticipate" engine.
 # Windows are in days relative to date of birth (negative = during pregnancy).
 # Source IDs refer to taxonomy.yaml -> sources. Jurisdiction-specific items are tagged.
+# corrected_age: true -> for premature babies the window shifts by the weeks born early.
 milestones:
   - id: waitlists
     title: "Research and join childcare waitlists"
@@ -47,6 +48,7 @@ milestones:
     source: [S5]
 
   - id: solids_readiness
+    corrected_age: true          # use corrected age for babies born early
     title: "Watch for solids readiness (around 6 months, not before 4)"
     window_days: [122, 213]
     taxonomy_ref: I07
@@ -54,6 +56,7 @@ milestones:
     note: "If not eating solids by ~7 months, check with your clinician."
 
   - id: allergen_introduction
+    corrected_age: true          # use corrected age for babies born early
     title: "Introduce common allergens one at a time (by 12 months)"
     window_days: [152, 365]
     taxonomy_ref: I08
@@ -61,6 +64,7 @@ milestones:
     note: "Keep tolerated allergens in the diet at least weekly."
 
   - id: potty_training_consider
+    corrected_age: true          # use corrected age for babies born early
     title: "Consider potty-training start; check preschool requirements"
     window_days: [548, 1095]
     taxonomy_ref: T09
