@@ -5,8 +5,11 @@ policy_name: "Example crèche (synthetic)"
 timezone: "Europe/Zurich"
 
 # When a child is cleared, they may return at the first opening time at or after
-# the clearance moment ("next_opening"), which in practice means the next morning.
-return_rule: next_opening
+# the clearance moment, which in practice means the next morning.
+
+# Cover is planned in half-days, split at this time, so one parent can take the
+# morning and the other the afternoon. Remove the line for whole-day blocks.
+handover_at: "13:00"
 
 opening_hours:          # weekday -> "HH:MM-HH:MM"; omitted days are closed
   mon: "07:30-18:30"
@@ -41,3 +44,7 @@ red_flags:
   - "stiff neck"
   - "non-blanching rash"
 fever_red_flag_under_months: 3   # any fever at or above threshold in a baby this young => escalate
+
+# SYNTHETIC: how long after a dose of fever-reducing medicine a normal temperature
+# still doesn't count as fever-free. Set this from your daycare's written policy.
+antipyretic_masking_hours: 8

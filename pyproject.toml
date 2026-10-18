@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "famops"
-version = "0.1.0"
+version = "0.2.0"
 description = "Shared family operations layer: task ownership, sick-day handoff and age-based anticipation for two-parent households. Usable from any MCP-capable AI assistant."
 readme = "README.md"
 license = { text = "MIT" }

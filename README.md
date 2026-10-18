@@ -1,45 +1,33 @@
 # famops
 
-**A shared operations layer for two-parent households.** famops keeps track of who owns each family task, works out sick-day exclusions and cover, and flags age-based deadlines before they become urgent. It plugs into any AI assistant that supports MCP (Model Context Protocol), Claude included.
+**A shared operations layer for two-parent households.** famops keeps track of who owns each family task, works out sick-day exclusions and proposes cover, and flags age-based deadlines before they become urgent. It plugs into any AI assistant that supports MCP (Model Context Protocol), Claude included.
 
-> The thesis: parental mental load is an **ownership** problem, not an information problem. Shared calendars already exist. What's missing is a system where every task has exactly one owner, and ownership only moves when the other parent accepts it.
+> Parental mental load is an **ownership** problem, not an information problem. In famops every task has exactly one owner, and nothing lands on the other parent until they say yes.
 
-## Why this exists
+## What it does
 
-Research behind the design (full taxonomy in [`src/famops/data/taxonomy.yaml`](src/famops/data/taxonomy.yaml)):
+| Job | How famops handles it |
+|---|---|
+| **Daycare sick call** | Applies the daycare's written policy to work out the earliest return. It asks for the child's age and the red-flag check first, and it accounts for fever medicine hiding a fever. |
+| **Who stays home** | Proposes one carer per **half-day**, using both calendars, meetings that can't move, and who has covered more this season. If both parents are stuck, it offers a helper (a grandparent or nanny) before flagging "backup needed". |
+| **Who owns what** | Every task has one owner. Handing a task over is a proposal the other parent accepts or declines. Unanswered handoffs return to the sender after 24 hours. Balance is shown in minutes of effort, not just task counts. |
+| **What's coming** | Turns a birth date into tasks, from waitlists in pregnancy to the first day of school. It uses corrected age for premature babies and doesn't duplicate tasks already in the ledger. |
 
-- **The most urgent parenting tasks are about cover and deadlines, not advice.** The taxonomy scores 92 tasks from newborn to preschool. The 15 that need both parents, are time-critical and suit AI help are sick-day cover, pickup and drop-off rotas, and enrolment deadlines.
-- **Sick days are the anchor.** About half of parents of under-6s in childcare missed work for a sick child in a year, and about two-thirds had a child sent home or kept out of childcare for illness (C.S. Mott poll, 2012).
-- **The unequal work is the invisible part.** Anticipating and monitoring are the household-labour steps split least evenly between partners (Daminger, *American Sociological Review*, 2019).
-- **General-purpose assistants are unreliable with dates and policy rules.** famops does that part deterministically, and the assistant explains the result in plain language.
+**Safety boundary.** famops never assesses symptoms. A reported red flag, or a fever in a baby under 3 months, returns "contact a doctor" and no date. The bundled daycare policy is **synthetic**: replace it with your own daycare's.
 
-## What it does (v0.1)
-
-| Module | What it does | Taxonomy tasks covered |
-|---|---|---|
-| `ledger` | SQLite task ledger. Every task has exactly one owner, ownership moves only on an accepted handoff, there's an audit log, and it shows each parent's load | All tasks that need an owner |
-| `sickday` | Applies a daycare exclusion policy to compute the earliest return time, then assigns one parent per day of cover based on calendar conflicts, immovable meetings and fairness so far this season | I12–I14, T05–T07, P16 |
-| `anticipate` | Turns a child's date of birth into tasks that are due now or coming up (waitlists, check-ups, solids and allergens, potty training) and works out which school year they start | N01, N03, N10, N13, N15, I07, I08, T09, P01 |
-| `server` | MCP server exposing all of the above as tools | — |
-
-**Safety boundary.** `sickday` never assesses symptoms. If the parent reports any red flag, or a baby under 3 months has a fever, it returns `escalate` with an instruction to contact a clinician. It never returns a date in that case. The bundled daycare policy is **synthetic**: replace it with your own daycare's written policy.
-
-## Quickstart
+## Try it in 2 minutes
 
 ```bash
-git clone https://github.com/<you>/famops && cd famops
-python -m venv .venv && source .venv/bin/activate
+git clone https://github.com/dk-lee-sk/famops && cd famops
+python3 -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
-
-famops demo                                   # daycare calls Thursday 11:00: fever 38.5°C
-famops upcoming --dob 2025-02-10              # what's coming for a 20-month-old
-famops taxonomy --stage toddler --priority    # priority tasks for toddlers
-pytest
+famops demo            # Thursday sick call: return date, half-day cover, Grandma steps in Friday morning
+pytest                 # 42 checks
 ```
 
-### Use it from Claude (or any MCP client)
+## Connect it to Claude
 
-Add this to your MCP client config (for Claude Desktop, that's `claude_desktop_config.json`):
+Each parent sets up their **own** connection, with their own name. famops only ever acts as that person.
 
 ```json
 {
@@ -47,6 +35,7 @@ Add this to your MCP client config (for Claude Desktop, that's `claude_desktop_c
     "famops": {
       "command": "famops-mcp",
       "env": {
+        "FAMOPS_USER": "Alex",
         "FAMOPS_DB": "~/.famops/famops.db",
         "FAMOPS_POLICY": "/path/to/your_daycare_policy.yaml"
       }
@@ -55,48 +44,48 @@ Add this to your MCP client config (for Claude Desktop, that's `claude_desktop_c
 }
 ```
 
-Then you can ask, for example: *"Daycare just called, fever 38.5 at 11. When can she go back, and who covers? Here are both our calendars."* The assistant calls `report_illness`, then `plan_sick_cover`, and writes the result to the ledger as owned tasks.
+Start with "Set up our household: Alex and Sam." Then, for example: *"Daycare called, fever 38.5 at 11. When can she go back, and who covers?"*
+
+**Sharing between two parents (current limit).** Both connections must use the same database file, so for now both parents use famops from one computer. A hosted shared ledger with a login for each parent is the next step on the roadmap.
 
 ## Tools
 
 | Tool | Purpose |
 |---|---|
-| `set_household(members)` | Register the adults in the household |
-| `create_task(title, owner, due?, ref?)` | Create a task; an owner is mandatory |
-| `list_tasks(owner?, status?)` | List tasks, optionally filtered |
-| `handoff_task(id, from, to, note?)` | Propose a handoff (status becomes `handoff_pending`) |
-| `respond_to_handoff(id, by, accept)` | Only the proposed new owner can accept or decline |
-| `complete_task(id, by)` | Only the owner can mark a task done |
-| `load_balance(days?)` | Open and recently completed tasks per parent |
-| `report_illness(symptoms, child_age_months?, red_flags?)` | Apply the exclusion policy: earliest return time, or `escalate` |
-| `plan_sick_cover(now, return_at, parents, create_tasks?)` | One owner per day-block, with backup-care flags |
-| `upcoming_for_child(dob, today?, horizon_days?)` | Age-anchored tasks plus school entry year |
-| `taxonomy_tasks(stage?, priority_only?)` | Query the 92-task taxonomy |
+| `set_household(members)` / `whoami()` | Register the adults; check who this connection acts for |
+| `create_task(title, owner?, due?, effort_min?)` | Create a task for yourself, or propose one to your partner |
+| `handoff_task(id, to_owner)` / `respond_to_handoff(id, accept)` | Offer a task to your partner; accept or decline one offered to you |
+| `complete_task(id)` / `list_tasks()` / `load_balance()` | Mark a task done, list tasks, see who carries what |
+| `report_illness(symptoms, child_age_months, red_flags)` | Earliest return date, or `escalate` / `needs_info` |
+| `plan_sick_cover(now, return_at, parents, helpers?, propose_tasks?)` | Half-day cover plan; with `propose_tasks`, each block is sent to its parent to accept |
+| `upcoming_for_child(dob, weeks_premature?)` / `add_upcoming_to_ledger(dob)` | What's due, and turn it into owned tasks |
 
-## Writing your daycare's policy
+## Your daycare's policy
 
 Copy `src/famops/data/policy_example.yaml` and set:
 
 - opening hours and closure dates
-- an exclusion rule per symptom: `exclude_hours_after_last`, `exclude_hours_after_treatment_start` or `requires_doctor_note`
-- the red flags that should trigger escalation
+- the half-day handover time
+- one exclusion rule per symptom
+- how long a dose of fever medicine counts as hiding a fever
+- the red flags
 
 ## Roadmap
 
-| Version | Scope | Why |
-|---|---|---|
-| 0.2 | Read calendars from Google Calendar or ICS, so busy times don't have to be typed in | Removes the main manual step |
-| 0.3 | Turn daycare emails and app posts into owned tasks, with the AI reading the message and the ledger storing the tasks | Covers the largest benchmark category (daycare messages) |
-| 0.4 | `bench/`: toddler-ops-bench, comparing general AI assistants with and without famops | Shows whether famops adds value, with data |
-| 0.5 | Daily digest per parent, nudges when a handoff goes unanswered, a monthly load review | Targets the anticipating and monitoring work |
-| Later | Multi-device sync and a thin mobile client | Only after the core loop is validated |
+| Next | Why |
+|---|---|
+| Hosted shared ledger with a login for each parent | So two parents on two phones share one ledger |
+| Google Calendar and ICS "busy/free" sync | Removes typing calendars into the chat |
+| Daycare email to owned tasks | Covers the largest category of everyday admin |
+| Country versions (Switzerland, Singapore, Thailand) | School entry and paperwork rules differ by country; the current set is US-centred |
+| Several children, recurring tasks | Siblings and weekly chores |
 
-## Status and caveats
+See [CHANGELOG.md](CHANGELOG.md) for what changed in each version and [docs/PRODUCT.md](docs/PRODUCT.md) for strategy.
 
-- This is a v0.1 prototype and is not medical software. Exclusion logic only applies the policy you give it.
-- The evidence behind the taxonomy is mostly from the US. Deadlines such as insurance enrolment and school entry vary by country, and US-specific items are tagged.
-- Taxonomy rows with source `U` are unsourced and need validating with parents.
+## Caveats
 
-## License
+- This is a prototype and is not medical software.
+- Evidence behind the taxonomy is mostly from the US.
+- Taxonomy rows marked `U` are unsourced.
 
-MIT
+MIT licence.

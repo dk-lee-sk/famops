@@ -35,3 +35,11 @@ def test_taxonomy_counts():
     assert len(taxonomy()) == 92
     assert len(taxonomy(priority_only=True)) == 15
     assert all(t["stage"] == "toddler" for t in taxonomy("toddler"))
+
+
+def test_premature_baby_uses_corrected_age_for_development_only():
+    dob = date(2026, 5, 15)
+    term = {u.id for u in upcoming(dob, today=date(2026, 9, 20))}
+    early = {u.id: u for u in upcoming(dob, today=date(2026, 9, 20), weeks_premature=8)}
+    assert "solids_readiness" in term          # 4 months old at term
+    assert "solids_readiness" not in early or early["solids_readiness"].status == "upcoming"

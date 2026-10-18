@@ -4,7 +4,7 @@ from importlib.resources import files
 
 import yaml
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 
 
 def load_bundled(name: str) -> dict:
