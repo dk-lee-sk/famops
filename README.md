@@ -1,5 +1,9 @@
 # famops
 
+[![ci](https://github.com/dk-lee-sk/famops/actions/workflows/ci.yml/badge.svg)](https://github.com/dk-lee-sk/famops/actions/workflows/ci.yml)
+![python](https://img.shields.io/badge/python-3.10%20%7C%203.12%20%7C%203.13-blue)
+![licence](https://img.shields.io/badge/licence-MIT-green)
+
 **A shared operations layer for two-parent households.** famops keeps track of who owns each family task, works out sick-day exclusions and proposes cover, and flags age-based deadlines before they become urgent. It plugs into any AI assistant that supports MCP (Model Context Protocol), Claude included.
 
 > Parental mental load is an **ownership** problem, not an information problem. In famops every task has exactly one owner, and nothing lands on the other parent until they say yes.
