@@ -90,6 +90,10 @@ Copy `src/famops/data/policy_example.yaml` and set:
 
 See [CHANGELOG.md](CHANGELOG.md) for what changed in each version and [docs/PRODUCT.md](docs/PRODUCT.md) for strategy.
 
+## How it was built
+
+Built with [Claude Code](https://claude.com/claude-code). Claude wrote the code and tests; I did the research behind the taxonomy, set the product direction, reviewed each change and decided what to fix after a real-life critique (see [CHANGELOG.md](CHANGELOG.md)).
+
 ## Caveats
 
 - This is a prototype and is not medical software.
