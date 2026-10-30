@@ -1,8 +1,16 @@
 # famops
 
+[![ci](https://github.com/dk-lee-sk/famops/actions/workflows/ci.yml/badge.svg)](https://github.com/dk-lee-sk/famops/actions/workflows/ci.yml)
+![python](https://img.shields.io/badge/python-3.10%20%7C%203.12%20%7C%203.13-blue)
+![licence](https://img.shields.io/badge/licence-MIT-green)
+
 **A shared operations layer for two-parent households.** famops keeps track of who owns each family task, works out sick-day exclusions and proposes cover, and flags age-based deadlines before they become urgent. It plugs into any AI assistant that supports MCP (Model Context Protocol), Claude included.
 
 > Parental mental load is an **ownership** problem, not an information problem. In famops every task has exactly one owner, and nothing lands on the other parent until they say yes.
+
+![famops in action: a daycare sick call becomes a half-day cover plan, Grandma is proposed when both parents are stuck, and Sam accepts the blocks offered to him](docs/demo.gif)
+
+*The rules in action (interactive demo running the same logic as the code): a Thursday fever call becomes a return date and a half-day cover plan; when both parents are stuck, a helper is proposed before "backup needed"; the other parent's blocks arrive as offers they accept.*
 
 ## What it does
 
@@ -81,6 +89,10 @@ Copy `src/famops/data/policy_example.yaml` and set:
 | Several children, recurring tasks | Siblings and weekly chores |
 
 See [CHANGELOG.md](CHANGELOG.md) for what changed in each version and [docs/PRODUCT.md](docs/PRODUCT.md) for strategy.
+
+## How it was built
+
+Built with [Claude Code](https://claude.com/claude-code). Claude wrote the code and tests; I did the research behind the taxonomy, set the product direction, reviewed each change and decided what to fix after a real-life critique (see [CHANGELOG.md](CHANGELOG.md)).
 
 ## Caveats
 
