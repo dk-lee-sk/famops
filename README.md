@@ -8,6 +8,10 @@
 
 > Parental mental load is an **ownership** problem, not an information problem. In famops every task has exactly one owner, and nothing lands on the other parent until they say yes.
 
+![famops in action: a daycare sick call becomes a half-day cover plan, Grandma is proposed when both parents are stuck, and Sam accepts the blocks offered to him](docs/demo.gif)
+
+*The rules in action (interactive demo running the same logic as the code): a Thursday fever call becomes a return date and a half-day cover plan; when both parents are stuck, a helper is proposed before "backup needed"; the other parent's blocks arrive as offers they accept.*
+
 ## What it does
 
 | Job | How famops handles it |
